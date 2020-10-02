@@ -323,6 +323,7 @@ static void sc_bootstrap_mount_namespace(const struct sc_mount_config *config)
 		//  - https://bugzilla.opensuse.org/show_bug.cgi?id=1028568
 		const char *dirs_from_core[] =
 		    { "/etc/alternatives", "/etc/ssl", "/etc/nsswitch.conf",
+                      "/etc/apparmor", "/etc/apparmor.d",
 			NULL
 		};
 		for (const char **dirs = dirs_from_core; *dirs != NULL; dirs++) {

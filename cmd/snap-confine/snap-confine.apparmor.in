@@ -221,11 +221,15 @@
     mount options=(rw bind) @SNAP_MOUNT_DIR@/*/*/etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
     mount options=(rw bind) @SNAP_MOUNT_DIR@/*/*/etc/ssl/ -> /tmp/snap.rootfs_*/etc/ssl/,
     mount options=(rw bind) @SNAP_MOUNT_DIR@/*/*/etc/nsswitch.conf -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
+    mount options=(rw bind) @SNAP_MOUNT_DIR@/*/*/etc/apparmor/ -> /tmp/snap.rootfs_*/etc/apparmor/,
+    mount options=(rw bind) @SNAP_MOUNT_DIR@/*/*/etc/apparmor.d/ -> /tmp/snap.rootfs_*/etc/apparmor.d/,
     # /etc/alternatives (core)
     mount options=(rw bind) /etc/alternatives/ -> /tmp/snap.rootfs_*/etc/alternatives/,
     mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/alternatives/,
     mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/ssl/,
     mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/nsswitch.conf,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/apparmor/,
+    mount options=(rw slave) -> /tmp/snap.rootfs_*/etc/apparmor.d/,
     # the /snap directory
     mount options=(rw rbind) @SNAP_MOUNT_DIR@/ -> /tmp/snap.rootfs_*/snap/,
     mount options=(rw rslave) -> /tmp/snap.rootfs_*/snap/,
