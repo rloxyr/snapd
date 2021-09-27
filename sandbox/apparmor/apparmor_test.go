@@ -199,27 +199,27 @@ func (s *apparmorSuite) TestProbeAppArmorParserFeatures(c *C) {
 		expFeatures []string
 	}{
 		{
-			exitCodes: []int{1, 1, 1, 1},
+			exitCodes: []int{1, 1, 1, 1, 1},
 		},
 		{
-			exitCodes:   []int{1, 0, 1, 1},
+			exitCodes:   []int{1, 1, 0, 1, 1},
 			expFeatures: []string{"qipcrtr-socket"},
 		},
 		{
-			exitCodes:   []int{0, 1, 1, 1},
+			exitCodes:   []int{0, 1, 1, 1, 1},
 			expFeatures: []string{"unsafe"},
 		},
 		{
-			exitCodes:   []int{1, 1, 1, 0},
+			exitCodes:   []int{1, 1, 1, 1, 0},
 			expFeatures: []string{"cap-audit-read"},
 		},
 		{
-			exitCodes:   []int{0, 0, 1, 1},
+			exitCodes:   []int{0, 1, 0, 1, 1},
 			expFeatures: []string{"qipcrtr-socket", "unsafe"},
 		},
 		{
-			exitCodes:   []int{0, 0, 0, 0},
-			expFeatures: []string{"cap-audit-read", "cap-bpf", "qipcrtr-socket", "unsafe"},
+			exitCodes:   []int{0, 0, 0, 0, 0},
+			expFeatures: []string{"cap-audit-read", "cap-bpf", "include-if-exists", "qipcrtr-socket", "unsafe"},
 		},
 	}
 
@@ -263,6 +263,9 @@ exit "$EXIT_CODE"
  change_profile unsafe /**,
 }
 profile snap-test {
+ include if exists "/foo"
+}
+profile snap-test {
  network qipcrtr dgram,
 }
 profile snap-test {
@@ -303,7 +306,7 @@ func (s *apparmorSuite) TestInterfaceSystemKey(c *C) {
 	c.Check(features, DeepEquals, []string{"network", "policy"})
 	features, err = apparmor.ParserFeatures()
 	c.Assert(err, IsNil)
-	c.Check(features, DeepEquals, []string{"cap-audit-read", "cap-bpf", "qipcrtr-socket", "unsafe"})
+	c.Check(features, DeepEquals, []string{"cap-audit-read", "cap-bpf", "include-if-exists", "qipcrtr-socket", "unsafe"})
 }
 
 func (s *apparmorSuite) TestAppArmorParserMtime(c *C) {
@@ -343,7 +346,7 @@ func (s *apparmorSuite) TestFeaturesProbedOnce(c *C) {
 	c.Check(features, DeepEquals, []string{"network", "policy"})
 	features, err = apparmor.ParserFeatures()
 	c.Assert(err, IsNil)
-	c.Check(features, DeepEquals, []string{"cap-audit-read", "cap-bpf", "qipcrtr-socket", "unsafe"})
+	c.Check(features, DeepEquals, []string{"cap-audit-read", "cap-bpf", "include-if-exists", "qipcrtr-socket", "unsafe"})
 
 	// this makes probing fails but is not done again
 	err = os.RemoveAll(d)
