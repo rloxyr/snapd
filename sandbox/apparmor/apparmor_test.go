@@ -263,7 +263,7 @@ exit "$EXIT_CODE"
  change_profile unsafe /**,
 }
 profile snap-test {
- include if exists "/foo"
+ #include if exists "/foo"
 }
 profile snap-test {
  network qipcrtr dgram,

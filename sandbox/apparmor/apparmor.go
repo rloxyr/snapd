@@ -333,21 +333,36 @@ func probeParserFeatures() ([]string, error) {
 	if err != nil {
 		return []string{}, err
 	}
-	features := make([]string, 0, 5)
-	if tryAppArmorParserFeature(parser, "change_profile unsafe /**,") {
-		features = append(features, "unsafe")
+	var featureProbes = []struct {
+		feature string
+		probe   string
+	}{
+		{
+			feature: "unsafe",
+			probe:   "change_profile unsafe /**,",
+		},
+		{
+			feature: "include-if-exists",
+			probe:   "#include if exists \"/foo\"",
+		},
+		{
+			feature: "qipcrtr-socket",
+			probe:   "network qipcrtr dgram,",
+		},
+		{
+			feature: "cap-bpf",
+			probe:   "capability bpf,",
+		},
+		{
+			feature: "cap-audit-read",
+			probe:   "capability audit_read,",
+		},
 	}
-	if tryAppArmorParserFeature(parser, "include if exists \"/foo\"") {
-		features = append(features, "include-if-exists")
-	}
-	if tryAppArmorParserFeature(parser, "network qipcrtr dgram,") {
-		features = append(features, "qipcrtr-socket")
-	}
-	if tryAppArmorParserFeature(parser, "capability bpf,") {
-		features = append(features, "cap-bpf")
-	}
-	if tryAppArmorParserFeature(parser, "capability audit_read,") {
-		features = append(features, "cap-audit-read")
+	features := make([]string, 0, 3)
+	for _, fp := range featureProbes {
+		if tryAppArmorParserFeature(parser, fp.probe) {
+			features = append(features, fp.feature)
+		}
 	}
 	sort.Strings(features)
 	return features, nil
