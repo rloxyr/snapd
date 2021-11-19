@@ -383,7 +383,10 @@ func findAppArmorParser() (string, error) {
 func tryAppArmorParserFeature(parser, rule string) bool {
 	cmd := exec.Command(parser, "--preprocess")
 	cmd.Stdin = bytes.NewBufferString(fmt.Sprintf("profile snap-test {\n %s\n}", rule))
-	if err := cmd.Run(); err != nil {
+	output, err := cmd.CombinedOutput()
+	// older versions of apparmor_parser can exit with success even
+	// though they fail to parse
+	if err != nil || strings.Contains(string(output), "parser error") {
 		return false
 	}
 	return true
