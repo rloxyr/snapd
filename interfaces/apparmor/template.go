@@ -474,6 +474,8 @@ var templateCommon = `
 
 var templateFooter = `
 ###SNIPPETS###
+
+###INCLUDEIFEXISTS_LOCAL_SNAP_PROFILE###
 }
 `
 

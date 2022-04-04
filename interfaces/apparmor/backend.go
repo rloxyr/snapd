@@ -877,6 +877,15 @@ func (b *Backend) addContent(securityTag string, snapInfo *snap.Info, cmdName st
 				}
 			}
 			return "change_profile,"
+		case "###INCLUDEIFEXISTS_LOCAL_SNAP_PROFILE###":
+			features, _ := parserFeatures()
+			for _, f := range features {
+				if f == "include-if-exists" {
+					return fmt.Sprintf("#include if exists \"%s\"",
+						filepath.Join(dirs.SnapAppArmorDir, "local", securityTag))
+				}
+			}
+			return ""
 		case "###SNIPPETS###":
 			var tagSnippets string
 			if opts.Classic && opts.JailMode {
